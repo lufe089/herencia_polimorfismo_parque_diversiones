@@ -85,7 +85,7 @@ Piensa en el método `moverse(int distancia)`. Nuestro plano de Animal dice: `st
 Así que, en nuestro plano de Vaca, simplemente no vamos a mencionar el método moverse. Al no definirlo, le estamos diciendo al compilador: "Oye, para el método moverse, usa la versión que ya tengo de mi clase Animal". Estamos reutilizando el código. 
 
 ### El Camino de la Sobreescritura: Cambiando lo que no nos sirve
-Ahora, volvamos al método `hacer_sonido()`. Si le decimos a nuestra vaca que "haga un sonido", según el plano de Animal, dirá "emite un sonido genérico". ¡Pero una vaca no hace eso! Una vaca muge. "¡Muuu!".
+Ahora, volvamos al método `hacer_sonido()`. Si le decimos a nuestra vaca que "haga un sonido", según el plano de Animal, dirá "emite un sonido genérico". Pero una vaca no hace eso Una vaca muge. "Muuu".
 
 Necesitamos tomar el comportamiento hacer_sonido que heredamos de Animal y cambiarlo por completo. Reemplazarlo por una versión que sea específica para la vaca.
 
@@ -139,7 +139,7 @@ void Vaca::producir_leche() {
 
 // Aquí está la SOBREESCRITURA simple.
 void Vaca::hacer_sonido() {
-    std::cout << nombre << " muge: ¡Muuuu!" << std::endl;
+    std::cout << nombre << " muge: Muuuu" << std::endl;
 }
 
 // Aquí está la SOBREESCRITURA con EXTENSIÓN.
@@ -162,8 +162,6 @@ void Vaca::comer() {
 * Extensión: Dentro de nuestro nuevo método `comer()`, primero llamamos a `Animal::comer()` para que se ejecute el comportamiento original, y luego añadimos nuestro cout extra. Hacemos lo del padre y algo más.
 
 ## Clases Abstractas
-Ahora, vamos a subir un nivel más en la abstracción.
-
 Hemos estado trabajando con la idea de un "Animal" genérico que "hace un sonido genérico". Pero en la vida real, no puedes ir a una tienda y comprar "un animal". Compras un perro, un gato, un pez. Cada animal concreto hace un sonido concreto. La idea de "Animal" es solo eso, una idea, una categoría.
 
 En programación, a veces tenemos clases que representan ideas tan generales que no tiene sentido crear un objeto directamente de ellas. Son planos para otros planos. Son lo que llamamos clases abstractas.
@@ -190,7 +188,7 @@ public:
     void comer();
     void moverse(int distancia);
 
-    // ¡Método puro virtual!
+    // Método puro virtual
     // Estamos obligando a cualquier clase que herede de Animal a definir CÓMO hace su sonido.
     // La clase Animal ahora es abstracta. No puedes hacer 'new Animal("pepito")'.
     virtual void hacer_sonido() = 0;
@@ -229,14 +227,15 @@ void Animal::moverse(int distancia) {
 ### Análisis
 
 * Claridad y Contratos: Ahora a clase Animal dice claramente: "Yo no sé cómo hacer un sonido, pero te aseguro que cualquier cosa que sea un Animal sí sabrá cómo hacerlo". Es un contrato. Si creas una clase Perro y no implementas hacer_sonido, el compilador te dará un error. Te está obligando a ser coherente.
-Diseño Robusto: Evita que existan "medias clases". Evita que alguien pueda crear un objeto Animal que no hace nada útil. Fuerzas a que todo el mundo trabaje con objetos concretos y bien definidos (Vaca, Gallina, etc.).
+  
+* Diseño Robusto: Evita que existan "medias clases". Evita que alguien pueda crear un objeto Animal que no hace nada útil. Fuerzas a que todo el mundo trabaje con objetos concretos y bien definidos (Vaca, Gallina, etc.).
 
 ## Polimorfismo
 Tenemos nuestro plano general Animal. Tenemos un plano específico Vaca que sobrescribe un comportamiento. Podríamos hacer lo mismo para una Gallina (que cacarea), un Cerdo (que gruñe), etc.
 
 Ahora imagina que eres el granjero. Es por la mañana y tienes que despertar a todos. ¿Qué haces? ¿Te vas a la vaca y le dices "muge", luego a la gallina y le dices "cacarea"? Sería un trabajo terrible, sobre todo si tienes 100 animales.
 
-No. Tú, como granjero inteligente, te paras en medio del corral y gritas una sola orden: "¡Animales, hagan su ruido!".
+No. Tú, como granjero inteligente, te paras en medio del corral y gritas una sola orden: "Animales, hagan su ruido".
 
 No te diriges a cada uno por su tipo. Te diriges a todos como a lo que son: Animales. Y cada uno, al escuchar esa orden general, responde como sabe responder. La vaca muge, la gallina cacarea.
 
@@ -257,7 +256,7 @@ public:
     Gallina(std::string nombre) : Animal(nombre) {}
 
     void hacer_sonido() {
-        std::cout << nombre << " cacarea: ¡Cocorocó!" << std::endl;
+        std::cout << nombre << " cacarea: Cocorocó" << std::endl;
     }
 
     void comer() {
@@ -269,16 +268,16 @@ public:
 // Esta función es la del granjero.
 // Recibe una lista de punteros a Animal. No sabe ni le importa si son vacas o gallinas.
 void rutina_matutina(std::vector<Animal*>& lista_de_animales) {
-    std::cout << "--- El granjero grita: ¡Buenos días! ---" << std::endl;
+    std::cout << "--- El granjero grita: Buenos días ---" << std::endl;
     for (int i = 0; i < lista_de_animales.size(); ++i) {
-        // ¡Llamada polimórfica!
+        // Llamada polimórfica
         // Se le dice al "animal" (sea lo que sea) que haga su sonido.
         lista_de_animales[i]->hacer_sonido();
     }
 }
 
 void rutina_alimentacion(std::vector<Animal*>& lista_de_animales) {
-    std::cout << "\n--- Es la hora de comer! ---" << std::endl;
+    std::cout << "\n--- Es la hora de comer ---" << std::endl;
     for (int i = 0; i < lista_de_animales.size(); ++i) {
         lista_de_animales[i]->comer();
     }
@@ -309,12 +308,12 @@ int main() {
 Salida esperada
 
 ```cpp
---- El granjero grita: ¡Buenos días! ---
-Lola muge: ¡Muuuu!
-Clara cacarea: ¡Cocorocó!
-Petra muge: ¡Muuuu!
+--- El granjero grita: Buenos días ---
+Lola muge: Muuuu
+Clara cacarea: Cocorocó
+Petra muge: Muuuu
 
---- Es la hora de comer! ---
+--- Es la hora de comer ---
 Lola está comiendo pienso genérico.
   -> Registrando consumo de hierba para Lola.
 Clara está comiendo pienso genérico.
@@ -326,7 +325,7 @@ Petra está comiendo pienso genérico.
 ### Análisis
 Las funciones no tienen ni un if que pregunte "si es una vaca, haz esto, si es una gallina, haz lo otro".
 Simplemente iteran y llaman a un método.
-Gracias a virtual, el programa se encarga de llamar a la versión correcta en cada caso, tanto para hacer_sonido como para comer.
+>Gracias a la palabra clave `virtual`, el programa se encarga de llamar a la versión correcta en cada caso, tanto para `hacer_sonido` como para `comer`.
 
 
 ## Ejercicio integrador Parque de Diversiones “Aventura Total”
