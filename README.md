@@ -467,7 +467,7 @@ Atracción con iluminación y sonido especializados. El gasto eléctrico puede v
 
 ### Reglas de entrada y salida de datos (para orientar la consola)
 
-- Entrada mínima sugerida por atracción:
+- Entrada sugerida por atracción:
   - Nombre (texto)
   - Horas de operación `h` (entero)
   - Horas adicionales `x` (entero)
@@ -479,8 +479,52 @@ Atracción con iluminación y sonido especializados. El gasto eléctrico puede v
   - Suma de costos en jornada extendida
   - Suma de consumo energético
 
-### Lo que se espera del sistema
 
+### Condiciones para el diseño
+
+#### 1) Estructura conceptual obligatoria
+
+El sistema debe incluir **una clase general** que represente una atracción del parque.  
+A partir de ella, deben derivarse los tipos específicos de atracciones, cumpliendo las siguientes condiciones:
+
+- Debe existir **al menos un método obligatorio** cuya definición sea diferente para cada tipo de atracción.  
+  > (Esto implica que la clase general no puede ser instanciada directamente.)
+
+- Debe existir **al menos un método con comportamiento por defecto** en la clase general, que se use de diferentes formas en las clases específicas:
+  - Una atracción debe **heredar ese comportamiento sin modificarlo**.  
+  - Otra debe **ampliarlo** (invocar el comportamiento general y **agregar una acción o ajuste adicional**).  
+  - Otra debe **sustituirlo completamente** por un nuevo cálculo.
+
+- Debe existir **un método con el mismo nombre pero con una lista de parámetros diferente**, que permita realizar cálculos en otro escenario (por ejemplo, cuando el parque amplía su horario de atención).
+
+> Estas condiciones garantizan la existencia de una clase base no instanciable, la reutilización de comportamiento, y el uso de variaciones reales de comportamiento entre tipos.
+
+---
+
+#### 2) Evidencia explícita de comportamiento dinámico
+
+Los cálculos globales del parque deben realizarse a partir de **una colección de elementos tratados de forma general** (todas las atracciones almacenadas como un mismo tipo base).
+
+El programa debe invocar los métodos de cálculo a través de esta colección, y cada atracción debe responder con su propio comportamiento.
+
+> No se permite usar `if`, `switch` o cualquier otro mecanismo que distinga manualmente el tipo de atracción.
+
+El sistema debe demostrar que, al tratar los objetos como instancias del mismo tipo general, cada uno ejecuta su comportamiento particular según su clase.
+
+---
+
+#### 3) Reutilización y extensión
+
+Dentro de los cálculos:
+
+- Al menos **una atracción** debe **usar el comportamiento general y luego extenderlo**, agregando operaciones adicionales al resultado del cálculo común.  
+  (Por ejemplo, sumar un recargo, aplicar una inspección adicional, o modificar un valor parcialmente.)
+
+- Al menos **otra atracción** debe **reemplazar por completo el comportamiento general** con su propio cálculo independiente.
+
+Estas diferencias deben ser **evidentes al ejecutar el programa**, mostrando resultados distintos bajo las mismas condiciones iniciales.
+
+---
 El programa debe:
 
 1. Permitir crear distintos tipos de atracciones con sus datos básicos
@@ -489,16 +533,3 @@ El programa debe:
 4. Calcular el consumo energético aproximado de cada atracción según su tipo.
 5. Mostrar por consola un resumen con la información individual y los totales del parque.
 
---
-
-Cada atracción comparte una base común, pero el comportamiento no será idéntico en todos los casos:
-
-- Algunas atracciones **mantienen el mismo comportamiento** que se usa de forma general.  
-- Otras **ajustan parcialmente** el cálculo del costo o del consumo.  
-- Algunas **lo sustituyen completamente** por su propia lógica.  
-- En ciertos casos, la clase general no define el comportamiento y obliga a las atracciones a establecer el suyo.  
-- Debe existir además un cálculo de costo que permita pasar distintos valores y obtener resultados diferentes.
-
-El diseño debe permitir que el sistema principal trate a todas las atracciones de manera similar, aunque cada una responda de acuerdo con sus propias reglas.
-
----"
